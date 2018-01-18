@@ -1,0 +1,40 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "load"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "app": "load"
+    },
+    "template": {
+      "metadata": {
+        "name": "load",
+        "labels": {
+          "app": "load"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "load",
+            "imagePullPolicy": "Always",
+            "image": "gcr.io/siarkowicz-test-191814/load:v1",
+            "env": [
+              {
+                "name": "USER_COUNT",
+                "value": "1"
+              },
+              {
+                "name": "READS_PER_WRITE",
+                "value": "10"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
