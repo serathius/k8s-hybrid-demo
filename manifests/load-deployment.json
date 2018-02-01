@@ -8,7 +8,7 @@
     }
   },
   "spec": {
-    "replicas": 1,
+    "replicas": ${LOAD_REPLICAS},
     "selector": {
       "matchLabels": {
         "app": "load"
@@ -29,11 +29,11 @@
             "env": [
               {
                 "name": "USER_COUNT",
-                "value": "1"
+                "value": "${LOAD_USER_COUNT}"
               },
               {
                 "name": "READS_PER_WRITE",
-                "value": "10"
+                "value": "1000"
               }
             ]
           }
