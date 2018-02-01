@@ -1,17 +1,21 @@
 {
-  "kind": "ReplicationController",
-  "apiVersion": "v1",
+  "apiVersion": "apps/v1beta2",
+  "kind": "Deployment",
   "metadata": {
-    "name": "load"
+    "name": "load",
+    "labels": {
+      "app": "load"
+    }
   },
   "spec": {
     "replicas": 1,
     "selector": {
-      "app": "load"
+      "matchLabels": {
+        "app": "load"
+      }
     },
     "template": {
       "metadata": {
-        "name": "load",
         "labels": {
           "app": "load"
         }
