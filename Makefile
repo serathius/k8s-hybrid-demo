@@ -1,9 +1,12 @@
+include defaults.env
+export $(shell sed 's/=.*//' defaults.env)
+
 all: deploy
 
 deploy:
-	kubectl apply -f manifests/
+	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
 
 clean:
-	kubectl delete -f manifests/
+	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
 
 .PHONY: deploy clean
