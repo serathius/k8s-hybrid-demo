@@ -4,9 +4,12 @@
 : ${READS_PER_WRITE:=1000}
 
 
+handle_exit() {
+  trap 'exit 0' SIGTERM && kill -- -$$
+}
+trap handle_exit SIGINT SIGTERM EXIT
 for j in $(seq 1 ${USER_COUNT}); do
     {
-    sleep $(( ( RANDOM % ${READS_PER_WRITE} ) ))
     while true; do
         for i in $(seq 1 ${READS_PER_WRITE}); do
             curl -sS "${BASE_URL}/lrange/guestbook" > /dev/null || true
