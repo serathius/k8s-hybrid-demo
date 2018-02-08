@@ -23,7 +23,7 @@ spec:
         - name: USER_COUNT
           value: "${LOAD_USER_COUNT}"
         - name: READS_PER_WRITE
-          value: '1000'
+          value: '10000'
         resources:
           requests:
             cpu: 500m
