@@ -9,6 +9,7 @@ Consists of:
 * Modified [guestbook-go](https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go) application to include prometheus metrics
 * Load generating application
 * Grafana Dashboard template
+* Haproxy as L7 loadbalancer for application
 
 Deploy:
 ```bash
