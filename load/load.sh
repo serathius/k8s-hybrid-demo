@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 : ${BASE_URL:="http://guestbook:3000"}
 : ${USER_COUNT:=1}
 : ${READS_PER_WRITE:=1000}
 
+curl -sS "${BASE_URL}/lrange/guestbook" > /dev/null
 
 handle_exit() {
   trap 'exit 0' SIGTERM && kill -- -$$
