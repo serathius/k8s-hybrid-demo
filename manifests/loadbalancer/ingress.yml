@@ -1,0 +1,9 @@
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: external
+spec:
+  backend:
+    serviceName: guestbook
+    servicePort: 3000

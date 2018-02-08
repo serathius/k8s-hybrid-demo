@@ -3,7 +3,7 @@ export $(shell sed 's/=.*//' defaults.env)
 
 all: deploy
 
-deploy:
+deploy: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
 
 break-overload-frontend:
@@ -21,4 +21,13 @@ clear-database-recods:
 clean:
 	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
 
-.PHONY: deploy clean
+tls-secret: build/tls.crt build/tls.key
+	kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key || true
+
+build/tls.crt build/tls.key: build
+	openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout build/tls.key -out build/tls.crt -subj '/CN=localhost'
+
+build:
+	mkdir -p build
+
+.PHONY: deploy clean tls-secret

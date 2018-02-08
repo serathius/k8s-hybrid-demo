@@ -1,0 +1,90 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: haproxy-ingress
+  name: haproxy-ingress
+spec:
+  selector:
+    matchLabels:
+      run: haproxy-ingress
+  template:
+    metadata:
+      labels:
+        run: haproxy-ingress
+    spec:
+      serviceAccountName: ingress-controller
+      containers:
+      - name: haproxy-ingress
+        image: quay.io/jcmoraisjr/haproxy-ingress:v0.5-beta.1
+        args:
+        - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
+        - --default-ssl-certificate=$(POD_NAMESPACE)/tls-secret
+        - --configmap=$(POD_NAMESPACE)/haproxy-ingress
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        - name: stat
+          containerPort: 1936
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      - name: haproxy-exporter
+        image: quay.io/prometheus/haproxy-exporter:v0.9.0
+        ports:
+        - name: metrics
+          containerPort: 9101
+        args:
+        - '--haproxy.scrape-uri=http://localhost:1936/stats;csv'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: haproxy-ingress
+  labels:
+    app: haproxy-ingress
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: metrics
+    port: 9101
+    targetPort: 9101
+  - name: stats
+    port: 1936
+    targetPort: 1936
+  selector:
+    run: haproxy-ingress
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: haproxy
+  labels:
+    k8s-app: haproxy
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: haproxy-ingress
+  endpoints:
+  - port: metrics
+    interval: 10s
+  namespaceSelector:
+    matchNames:
+    - default
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-ingress

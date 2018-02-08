@@ -24,6 +24,8 @@ spec:
           value: "${LOAD_USER_COUNT}"
         - name: READS_PER_WRITE
           value: '10000'
+        - name: BASE_URL
+          value: http://haproxy-ingress.default
         resources:
           requests:
             cpu: 500m
