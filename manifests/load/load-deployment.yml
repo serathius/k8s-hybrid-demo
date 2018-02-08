@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: load
+  labels:
+    app: load
+spec:
+  replicas: ${LOAD_REPLICAS}
+  selector:
+    matchLabels:
+      app: load
+  template:
+    metadata:
+      labels:
+        app: load
+    spec:
+      containers:
+      - name: load
+        imagePullPolicy: Always
+        image: gcr.io/siarkowicz-test-191814/load:v1
+        env:
+        - name: USER_COUNT
+          value: "${LOAD_USER_COUNT}"
+        - name: READS_PER_WRITE
+          value: '1000'
+        resources:
+          requests:
+            cpu: 500m

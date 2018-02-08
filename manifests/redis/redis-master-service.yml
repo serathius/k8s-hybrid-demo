@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-master
+  labels:
+    app: redis
+    role: master
+spec:
+  ports:
+  - port: 6379
+    targetPort: redis-server
+    name: redis-server
+  - port: 9121
+    name: metrics
+    targetPort: metrics
+  selector:
+    app: redis
+    role: master
