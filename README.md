@@ -2,7 +2,12 @@
 Example application with prometheus metrics based on kubernetes [guestbook-go](https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go)
 
 Requirements:
-* Running kubernetes cluster with running [kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus) cluster-monitoring setup
+* GKE/GCP kubernetes cluster in version 1.7+
+* Running prometheus using [kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* GNU Make
+* openssl
+* Bash
 
 Consists of:
 * Redis cluster with 1 master, 2 slaves that expose prometheus metrics using [oliver006/redis_exporter](https://github.com/oliver006/redis_exporter) sidecar container
