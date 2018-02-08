@@ -15,6 +15,9 @@ break-node:
 break-node-revert:
 	./scripts/break-node.sh REVERT
 
+clear-database-recods:
+	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
+
 clean:
 	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
 
