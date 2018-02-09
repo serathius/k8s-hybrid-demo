@@ -7,10 +7,10 @@ deploy: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
 
 hook-overload-frontend:
-	LOAD_USER_COUNT=100 LOAD_REPLICAS=10 envsubst < manifests/load-deployment.json | kubectl apply -f -
+	LOAD_USER_COUNT=100 LOAD_REPLICAS=1 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
 hook-overload-frontend-revert:
-	envsubst < manifests/load-deployment.json | kubectl apply -f -
+	envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
 hook-break-node:
 	./scripts/break-node.sh
