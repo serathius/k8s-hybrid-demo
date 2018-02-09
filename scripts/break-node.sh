@@ -1,7 +1,6 @@
 #!/bin/bash -e
-: ${PROJECT_NAME?"missing environment variable PROJECT_NAME"}
 NODE_HOST=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}' | cut -f1 -d' ')
-MASTER_ENDPOINT=$(gcloud container clusters describe ${PROJECT_NAME} | grep endpoint | cut -f2 -d' ')
+MASTER_ENDPOINT=$(kubectl get endpoints kubernetes -o jsonpath='{.subsets[0].addresses[0].ip}')
 if [ "$1" == "REVERT" ]; then
   echo "Reverting breaking node: ${NODE_HOST}"
   gcloud compute ssh ${NODE_HOST} -- "while \$(sudo iptables --delete OUTPUT --destination ${MASTER_ENDPOINT} --jump REJECT); do :; done"
