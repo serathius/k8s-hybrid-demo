@@ -13,19 +13,18 @@ Consists of:
 * Redis cluster with 1 master, 2 slaves that expose prometheus metrics using [oliver006/redis_exporter](https://github.com/oliver006/redis_exporter) sidecar container
 * Modified [guestbook-go](https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go) application to include prometheus metrics
 * Load generating application
-* Grafana Dashboard template
 * Haproxy as L7 loadbalancer for application
+* Grafana dashboards for guestbook application, HAproxy, Redis
 
 Deploy:
 ```bash
 make deploy
 ```
 
-
-Access to Grafana
+Use dashboards in Grafana
 * open [Grafana](http://localhost:8001/api/v1/proxy/namespaces/monitoring/services/grafana:3000)
-* login using credentials (default admin:admin)
-* import dashboard template by providing file `grafana/guestbook.json`
+* Sign in using credentials (default admin:admin)
+* import dashboards by providing files from grafana directory
 
 
 Clean:
