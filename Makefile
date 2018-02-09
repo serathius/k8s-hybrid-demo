@@ -33,6 +33,9 @@ hook-delete-pod-redis-slave:
 hook-delete-pod-redis-master:
 	LABEL_SELECTOR='app=redis,role=master' ./scripts/delete-pod.sh
 
+hook-delete-node:
+	./scripts/delete-node.sh
+
 hook-clear-redis-records:
 	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
 
