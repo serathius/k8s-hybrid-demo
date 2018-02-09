@@ -21,3 +21,12 @@ spec:
         ports:
         - name: http-server
           containerPort: 3000
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: purpose
+                operator: NotIn
+                values:
+                - monitoring

@@ -35,6 +35,15 @@ spec:
           requests:
             cpu: 10m
             memory: 20Mi
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - monitoring
 ---
 apiVersion: v1
 kind: Service

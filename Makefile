@@ -1,10 +1,16 @@
 include defaults.env
 export $(shell sed 's/=.*//' defaults.env)
 
-all: deploy
+all: manifests move-monitoring-to-marked-node
 
-deploy: tls-secret
+manifests: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
+
+move-monitoring-to-marked-node: mark-node
+	./scripts/move-monitoring-to-marked-node.sh
+
+mark-node:
+	./scripts/mark-node.sh
 
 hook-overload-frontend:
 	LOAD_USER_COUNT=100 LOAD_REPLICAS=1 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -

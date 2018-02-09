@@ -45,6 +45,15 @@ spec:
           containerPort: 9101
         args:
         - '--haproxy.scrape-uri=http://localhost:1936/stats;csv'
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - monitoring
 ---
 apiVersion: v1
 kind: Service
