@@ -20,6 +20,7 @@ clear-database-recods:
 
 clean:
 	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
+	rm build
 
 tls-secret: build/tls.crt build/tls.key
 	kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key || true
