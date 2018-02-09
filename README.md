@@ -23,9 +23,9 @@ make deploy
 ```
 
 ###Use dashboards in Grafana
-* open [Grafana](http://localhost:8001/api/v1/proxy/namespaces/monitoring/services/grafana:3000)
+* Open [Grafana](http://localhost:8001/api/v1/proxy/namespaces/monitoring/services/grafana:3000)
 * Sign in using credentials (default admin:admin)
-* import dashboards by providing files from grafana directory
+* Import dashboards by providing files from grafana directory
 
 
 ###Clean:
