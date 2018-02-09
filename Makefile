@@ -26,7 +26,7 @@ clean:
 	rm build
 
 tls-secret: build/tls.crt build/tls.key
-	kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key || true
+	kubectl create secret tls tls-secret --cert=build/tls.crt --key=build/tls.key || true
 
 build/tls.crt build/tls.key: build
 	openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout build/tls.key -out build/tls.crt -subj '/CN=localhost'
