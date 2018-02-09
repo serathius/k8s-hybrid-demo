@@ -6,20 +6,24 @@ all: deploy
 deploy: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
 
-break-overload-frontend:
+hook-overload-frontend:
 	LOAD_USER_COUNT=100 LOAD_REPLICAS=10 envsubst < manifests/load-deployment.json | kubectl apply -f -
 
-break-node:
+hook-overload-frontend-revert:
+	envsubst < manifests/load-deployment.json | kubectl apply -f -
+
+hook-break-node:
 	./scripts/break-node.sh
 
-break-node-revert:
+hook-break-node-revert:
 	./scripts/break-node.sh REVERT
 
-clear-database-recods:
+hook-clear-redis-records:
 	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
 
 clean:
 	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
+	rm build
 
 tls-secret: build/tls.crt build/tls.key
 	kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key || true
