@@ -1,16 +1,22 @@
 include defaults.env
 export $(shell sed 's/=.*//' defaults.env)
 
-all: deploy
+all: manifests move-monitoring-to-marked-node
 
-deploy: tls-secret
+manifests: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
 
+move-monitoring-to-marked-node: mark-node
+	./scripts/move-monitoring-to-marked-node.sh
+
+mark-node:
+	./scripts/mark-node.sh
+
 hook-overload-frontend:
-	LOAD_USER_COUNT=100 LOAD_REPLICAS=10 envsubst < manifests/load-deployment.json | kubectl apply -f -
+	LOAD_USER_COUNT=100 LOAD_REPLICAS=1 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
 hook-overload-frontend-revert:
-	envsubst < manifests/load-deployment.json | kubectl apply -f -
+	envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
 hook-break-node:
 	./scripts/break-node.sh
@@ -26,7 +32,7 @@ clean:
 	rm build
 
 tls-secret: build/tls.crt build/tls.key
-	kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key || true
+	kubectl create secret tls tls-secret --cert=build/tls.crt --key=build/tls.key || true
 
 build/tls.crt build/tls.key: build
 	openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout build/tls.key -out build/tls.crt -subj '/CN=localhost'

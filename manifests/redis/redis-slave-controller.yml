@@ -28,3 +28,12 @@ spec:
         ports:
         - name: metrics
           containerPort: 9121
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: purpose
+                operator: In
+                values:
+                - monitoring
