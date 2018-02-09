@@ -24,6 +24,15 @@ hook-break-node:
 hook-break-node-revert:
 	./scripts/break-node.sh REVERT
 
+hook-delete-pod-application:
+	LABEL_SELECTOR='app=guestbook' ./scripts/delete-pod.sh
+
+hook-delete-pod-redis-slave:
+	LABEL_SELECTOR='app=redis,role=slave' ./scripts/delete-pod.sh
+
+hook-delete-pod-redis-master:
+	LABEL_SELECTOR='app=redis,role=master' ./scripts/delete-pod.sh
+
 hook-clear-redis-records:
 	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
 

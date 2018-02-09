@@ -62,6 +62,14 @@ Runs FLUSHALL on Redis master
 make hook-clear-redis-records
 ```
 
+### Delete pod
+Deletes random pod from selected group
+```bash
+make hook-delete-pod-application
+make hook-delete-pod-redis-master
+make hook-delete-pod-redis-slave
+```
+
 ## Clean:
 ```bash
 make clean
