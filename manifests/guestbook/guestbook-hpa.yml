@@ -5,7 +5,7 @@ metadata:
   name: guestbook
 spec:
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 10
   scaleTargetRef:
     apiVersion: v1
     kind: ReplicationController
