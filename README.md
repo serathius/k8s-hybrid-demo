@@ -62,6 +62,12 @@ Runs FLUSHALL on Redis master
 make hook-clear-redis-records
 ```
 
+### Break pod
+Disrupts communication between loadbalancer and application pods on one instance
+```bash
+make hook-break-pod-application
+```
+
 ### Delete pod
 Deletes random pod from selected group
 ```bash
