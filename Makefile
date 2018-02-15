@@ -13,7 +13,7 @@ mark-node:
 	./scripts/mark-node.sh
 
 hook-overload-frontend:
-	LOAD_USER_COUNT=100 LOAD_REPLICAS=1 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
+	LOAD_USER_COUNT=100 LOAD_REPLICAS=4 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
 hook-overload-frontend-revert:
 	envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
