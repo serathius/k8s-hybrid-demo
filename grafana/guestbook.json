@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "4.5.2"
+      "version": "4.6.3"
     },
     {
       "type": "panel",
@@ -43,19 +43,29 @@
     }
   ],
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "editable": true,
   "gnetId": null,
-  "graphTooltip": 0,
+  "graphTooltip": 1,
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": "30s",
+  "refresh": "5s",
   "rows": [
     {
       "collapse": false,
-      "height": 215,
+      "height": 341,
       "panels": [
         {
           "aliasColors": {},
@@ -196,7 +206,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -242,7 +252,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"$Pod\"}[5m])) by (pod_name)",
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"$Pod\"}[60s])) by (pod_name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ pod_name }}",
@@ -274,7 +284,7 @@
               "label": "cores",
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -319,7 +329,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(go_gc_duration_seconds_sum{pod=~\"$Pod\"}[5m])",
+              "expr": "irate(go_gc_duration_seconds_sum{pod=~\"$Pod\"}[20s])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -395,7 +405,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(requests_total{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (code)",
+              "expr": "sum(irate(requests_total{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (code)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{code}}",
@@ -426,7 +436,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -471,7 +481,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99p",
@@ -479,7 +489,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95p",
@@ -487,7 +497,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90p",
@@ -495,7 +505,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.75, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.75, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "75p",
@@ -503,7 +513,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50p",
@@ -557,8 +567,179 @@
     },
     {
       "collapse": false,
-      "height": 216,
+      "height": 236,
       "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_PROMETHEUS}",
+          "decimals": 0,
+          "fill": 1,
+          "id": 11,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": false,
+            "sideWidth": null,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 12,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Utilization",
+              "refId": "A",
+              "step": 2
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_PROMETHEUS}",
+          "decimals": null,
+          "fill": 1,
+          "id": 12,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": false,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "span": 12,
+          "stack": false,
+          "steppedLine": true,
+          "targets": [
+            {
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / avg(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) / $hpa_target",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "Pods required to target utilization",
+              "refId": "B",
+              "step": 2
+            },
+            {
+              "expr": "sum(kube_pod_status_phase{pod=~\"guestbook.*\"}) by (phase)",
+              "format": "time_series",
+              "instant": false,
+              "intervalFactor": 2,
+              "legendFormat": "Pods {{phase}}",
+              "refId": "A",
+              "step": 2
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Pods Running / Pods required to target utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
         {
           "cacheTimeout": null,
           "colorBackground": false,
@@ -626,7 +807,7 @@
           ],
           "thresholds": "0.5,0.9",
           "timeFrom": "1m",
-          "timeShift": "5s",
+          "timeShift": null,
           "title": "Utilization for last 1m",
           "type": "singlestat",
           "valueFontSize": "80%",
@@ -638,176 +819,6 @@
             }
           ],
           "valueName": "current"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
-          "decimals": 0,
-          "fill": 1,
-          "id": 11,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": false,
-            "min": false,
-            "rightSide": true,
-            "show": false,
-            "sideWidth": null,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "span": 5,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "Utilization",
-              "refId": "A",
-              "step": 2
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percentunit",
-              "label": null,
-              "logBase": 1,
-              "max": "1.5",
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
-          "decimals": null,
-          "fill": 1,
-          "id": 12,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": false,
-            "hideZero": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null as zero",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "span": 5,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "count(kube_pod_info{pod=~\"guestbook.*\"})",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "Pods running",
-              "refId": "A",
-              "step": 2
-            },
-            {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / avg(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) / $hpa_target",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "Pods required to target utilization",
-              "refId": "B",
-              "step": 2
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Pods Running / Pods required to target utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
         },
         {
           "aliasColors": {},
@@ -842,9 +853,9 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "spaceLength": 10,
-          "span": 12,
+          "span": 10,
           "stack": false,
-          "steppedLine": false,
+          "steppedLine": true,
           "targets": [
             {
               "expr": "count(kube_pod_info{pod=~\"guestbook.*\"}) by (node)",
@@ -879,7 +890,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -903,7 +914,9 @@
   ],
   "schemaVersion": 14,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "application"
+  ],
   "templating": {
     "list": [
       {
@@ -946,7 +959,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -976,5 +989,5 @@
   },
   "timezone": "",
   "title": "Guestbook",
-  "version": 23
+  "version": 17
 }

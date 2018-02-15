@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "4.5.2"
+      "version": "4.6.3"
     },
     {
       "type": "panel",
@@ -36,7 +36,17 @@
     }
   ],
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "description": "Prometheus dashboard for Redis servers",
   "editable": true,
@@ -45,7 +55,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": "30s",
+  "refresh": "5s",
   "rows": [
     {
       "collapse": false,
@@ -975,8 +985,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "prometheus",
-    "redis"
+    "database"
   ],
   "templating": {
     "list": [
@@ -987,7 +996,7 @@
         "hide": 0,
         "includeAll": true,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "pod",
         "options": [],
         "query": "label_values(redis_commands_processed_total{service=~\"redis.*\"}, pod)",
@@ -1033,5 +1042,5 @@
   },
   "timezone": "browser",
   "title": "Redis",
-  "version": 7
+  "version": 4
 }
