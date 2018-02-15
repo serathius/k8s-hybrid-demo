@@ -24,6 +24,9 @@ hook-break-node:
 hook-break-node-revert:
 	./scripts/break-node.sh REVERT
 
+hook-break-pod-application:
+	./scripts/break-pod.sh
+
 hook-delete-pod-application:
 	LABEL_SELECTOR='app=guestbook' ./scripts/delete-pod.sh
 
