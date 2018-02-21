@@ -18,7 +18,7 @@ spec:
       containers:
       - name: load
         imagePullPolicy: Always
-        image: gcr.io/siarkowicz-test-191814/load:v1
+        image: gcr.io/siarkowicz-prometheus-example/load
         env:
         - name: USER_COUNT
           value: "${LOAD_USER_COUNT}"
