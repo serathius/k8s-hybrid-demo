@@ -116,7 +116,7 @@ func (m MetricsMiddleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, ne
 	res := rw.(negroni.ResponseWriter)
 	counter.WithLabelValues(fmt.Sprint(res.Status()), r.Method, r.URL.Path).Inc()
 	latency.WithLabelValues(fmt.Sprint(res.Status()), r.Method, r.URL.Path).Observe(
-		float64(time.Since(start).Seconds()) * float64(time.Millisecond))
+		float64(time.Since(start).Nanoseconds()) / float64(time.Millisecond))
 }
 
 func main() {
