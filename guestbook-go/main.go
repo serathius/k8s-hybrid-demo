@@ -134,8 +134,7 @@ func main() {
 	r.Path("/panic").Methods("GET").HandlerFunc(PanicHandler)
 	r.Path("/error").Methods("GET").HandlerFunc(ErrorHandler)
 
-	n := negroni.New()
+	n := negroni.New(MetricsMiddleware{}, negroni.NewLogger(), negroni.NewStatic(http.Dir("public")))
 	n.UseHandler(r)
-	n.Use(MetricsMiddleware{})
 	n.Run(":3000")
 }
