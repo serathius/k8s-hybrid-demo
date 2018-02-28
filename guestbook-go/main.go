@@ -99,6 +99,15 @@ func HandleError(result interface{}, err error) (r interface{}) {
 	return result
 }
 
+func PanicHandler(rw http.ResponseWriter, req *http.Request) {
+	panic("Forced panic")
+}
+
+func ErrorHandler(rw http.ResponseWriter, req *http.Request) {
+	rw.WriteHeader(http.StatusInternalServerError)
+	rw.Write([]byte("Forced error"))
+}
+
 type MetricsMiddleware struct{}
 
 func (m MetricsMiddleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
@@ -122,8 +131,10 @@ func main() {
 	r.Path("/info").Methods("GET").HandlerFunc(InfoHandler)
 	r.Path("/env").Methods("GET").HandlerFunc(EnvHandler)
 	r.Path("/metrics").Methods("GET").HandlerFunc(promhttp.Handler().ServeHTTP)
+	r.Path("/panic").Methods("GET").HandlerFunc(PanicHandler)
+	r.Path("/error").Methods("GET").HandlerFunc(ErrorHandler)
 
-	n := negroni.Classic()
+	n := negroni.New()
 	n.UseHandler(r)
 	n.Use(MetricsMiddleware{})
 	n.Run(":3000")
