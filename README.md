@@ -1,5 +1,5 @@
-# k8s-prometheus-metrics-example
-Example application with prometheus metrics based on kubernetes [guestbook-go](https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go)
+# k8s-logmon-demo
+Setup for monitoring example application [guestbook-go](https://github.com/kubernetes/kubernetes/tree/master/examples/guestbook-go) on kubernetes
 
 ## Consists of:
 * Redis cluster with 1 master, 2 slaves that expose prometheus metrics using [oliver006/redis_exporter](https://github.com/oliver006/redis_exporter) sidecar container
