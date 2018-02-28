@@ -405,7 +405,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(requests_total{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (code)",
+              "expr": "sum(irate(guestbook_requests_total{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (code)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{code}}",
@@ -481,7 +481,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99p",
@@ -489,7 +489,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95p",
@@ -497,7 +497,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "90p",
@@ -505,7 +505,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.75, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.75, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "75p",
@@ -513,7 +513,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50p",
@@ -989,5 +989,5 @@
   },
   "timezone": "",
   "title": "Guestbook",
-  "version": 17
+  "version": 18
 }
