@@ -18,14 +18,15 @@ hook-overload-frontend:
 hook-overload-frontend-revert:
 	envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
 
-hook-break-node:
-	./scripts/break-node.sh
+hook-break-connection-from-node-to-master:
+	./scripts/break-conn-node-master.sh
+	printf "Revert using\nmake hook-break-connection-from-node-to-master-revert"
 
-hook-break-node-revert:
-	./scripts/break-node.sh REVERT
+hook-break-connection-from-node-to-master-revert:
+	./scripts/break-conn-node-master.sh REVERT
 
-hook-break-pod-application:
-	./scripts/break-pod.sh
+hook-break-connection-from-node-to-lb:
+	./scripts/break-conn-node-lb.sh
 
 hook-delete-pod-application:
 	LABEL_SELECTOR='app=guestbook' ./scripts/delete-pod.sh

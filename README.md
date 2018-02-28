@@ -37,14 +37,16 @@ make
 
 
 ## Hooks
-### Break node
-Disrupts node to master communications. Useful to test node auto-repair.
+### Break connection from node to master
+Drops all packets on random node that are directed to master.
+Will result in node changing state to unready.
+Will be detected and fixed by auto-repair.
 ```bash
-make hook-break-node
+make hook-break-connection-from-node-to-master
 ```
-To fix node manually
+It's one off command that can be reverted by running
 ```bash
-make hook-break-node-revert
+make hook-break-connection-from-node-to-master
 ```
 ### Overload application
 
@@ -62,10 +64,11 @@ Runs FLUSHALL on Redis master
 make hook-clear-redis-records
 ```
 
-### Break pod
-Disrupts communication between loadbalancer and application pods on one instance
+### Break connection from loadbalancer to node
+Drops all packets on random node that are comming from LB.
+Will result in loadbalancer marking pods on that node unhealthy and direct more traffic to the rest of them.
 ```bash
-make hook-break-pod-application
+make hook-break-connection-from-node-to-lb
 ```
 
 ### Delete pod
