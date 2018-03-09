@@ -4,7 +4,8 @@ export $(shell sed 's/=.*//' defaults.env)
 all: move-monitoring-to-marked-node manifests
 
 manifests: tls-secret
-	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
+	kubectl apply -f manifests --recursive
+	envsubst < manifests/load/load-deployment.yml.tmpl | kubectl apply -f -
 
 move-monitoring-to-marked-node: mark-node
 	./scripts/move-monitoring-to-marked-node.sh
@@ -13,10 +14,10 @@ mark-node:
 	./scripts/mark-node.sh
 
 hook-overload-frontend:
-	LOAD_USER_COUNT=100 LOAD_REPLICAS=4 envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
+	LOAD_USER_COUNT=100 LOAD_REPLICAS=4 envsubst < manifests/load/load-deployment.yml.tmpl | kubectl apply -f -
 
 hook-overload-frontend-revert:
-	envsubst < manifests/load/load-deployment.yml | kubectl apply -f -
+	envsubst < manifests/load/load-deployment.yml.tmpl | kubectl apply -f -
 
 hook-break-connection-from-node-to-master:
 	./scripts/break-conn-node-master.sh
@@ -44,7 +45,7 @@ hook-clear-redis-records:
 	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
 
 clean:
-	find manifests/ -type f | xargs cat | envsubst | kubectl delete -f -
+	kubectl delete -f manifests --recursive
 	rm build
 
 tls-secret: build/tls.crt build/tls.key
