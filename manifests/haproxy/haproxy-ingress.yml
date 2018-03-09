@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         run: haproxy-ingress
+        target: "true"
     spec:
       serviceAccountName: ingress-controller
       containers:
