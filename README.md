@@ -18,8 +18,8 @@ We add node affinities to our internal manifests and using kubectl patching we a
 With this we implemented hooks to skip nodes with that label.
 
 ## Requirements:
-* GKE/GCP kubernetes cluster in version 1.7+
-* Running prometheus using [kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus)
+* GKE/GCP kubernetes cluster in version 1.8.x
+* [kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus) version 0.16.x
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * GNU Make
 * openssl
