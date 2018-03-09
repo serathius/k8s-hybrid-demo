@@ -5,8 +5,9 @@ Setup for monitoring example application [guestbook-go](https://github.com/kuber
 * Redis cluster with 1 master, 2 slaves that expose prometheus metrics using [oliver006/redis_exporter](https://github.com/oliver006/redis_exporter) sidecar container
 * Modified [guestbook-go](https://github.com/kubernetes/examples/tree/master/guestbook-go) application to include prometheus metrics
 * Load generating application
-* HAProxy as L7 loadbalancer for application
-* Grafana dashboards for guestbook application, HAProxy, Redis
+* [EFK](https://docs.fluentd.org/v0.12/articles/docker-logging-efk-compose) stack for collecting logs from all nodes
+* L7 loadbalancing using both HAProxy and Nginx
+* Grafana dashboards for guestbook application, HAProxy, Redis, Ngix
 * Scripts to move all monitoring to dedicated node
 * Hooks to interact with application/nodes that are not dedicated to monitoring
 
