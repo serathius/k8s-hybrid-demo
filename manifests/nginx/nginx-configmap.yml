@@ -1,0 +1,20 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-configuration
+  labels:
+    app: ingress-nginx
+data:
+  log-format-upstream: '{"real_ip": "$the_real_ip", "remote_user": "$remote_user", "time_local": "$time_local", "request": "$request", "status": "$status", "body_bytes_sent": $body_bytes_sent, "http_referer": "$http_referer", "http_user_agent": "$http_user_agent", "request_length": $request_length, "request_time": $request_time, "proxy_upstream_name": "$proxy_upstream_name", "upstream_addr": "$upstream_addr", "upstream_response_length": $upstream_response_length, "upstream_response_time": $upstream_response_time, "upstream_status": "$upstream_status"}'
+  log-format-escape-json: "true"
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: tcp-services
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: udp-services
