@@ -1,7 +1,7 @@
 include defaults.env
 export $(shell sed 's/=.*//' defaults.env)
 
-all: manifests move-monitoring-to-marked-node
+all: move-monitoring-to-marked-node manifests
 
 manifests: tls-secret
 	find manifests/ -type f | xargs cat | envsubst | kubectl apply -f -
