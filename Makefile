@@ -1,7 +1,7 @@
 include defaults.env
 export $(shell sed 's/=.*//' defaults.env)
 
-all: move-monitoring-to-marked-node manifests
+all: move-monitoring-to-marked-node manifests dashboards
 
 manifests: tls-secret
 	kubectl apply -f manifests --recursive
@@ -57,4 +57,24 @@ build/tls.crt build/tls.key: build
 build:
 	mkdir -p build
 
-.PHONY: deploy clean tls-secret
+dashboards := $(wildcard grafana/*-dashboard.json)
+dashboard_targets := $(patsubst grafana/%,build/dashboards/%,$(dashboards))
+datasources := $(wildcard grafana/*-datasource.json)
+datasource_targets := $(patsubst grafana/%,build/dashboards/%,$(datasources))
+
+build/dashboards:
+	mkdir -p build/dashboards
+
+build/dashboards/%-dashboard.json: build/dashboards grafana/%-dashboard.json
+	cat grafana/$*-dashboard.json | jq -c '{dashboard:., overwrite: true, inputs: [.__inputs[] | {name:.name, type:.type, value: (if .value? then .value else .pluginId end), pluginId:.pluginId}| delpaths([path(.[]| select(.==null))])] }' > build/dashboards/$*-dashboard.json
+
+build/dashboards/%-datasource.json: build/dashboards grafana/%-datasource.json
+	cp grafana/$*-datasource.json build/dashboards
+
+build/grafana-configmap.yml: $(datasource_targets) $(dashboard_targets)
+	kubectl -n monitoring create configmap grafana-dashboards-0 --from-file=build/dashboards/ --dry-run -o yaml > build/grafana-configmap.yml
+
+dashboards: build/grafana-configmap.yml
+	kubectl apply -f build/grafana-configmap.yml
+
+.PHONY: deploy clean tls-secret dashboards
