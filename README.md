@@ -7,6 +7,7 @@ Setup for monitoring example application [guestbook-go](https://github.com/kuber
 * Load generating application
 * [EFK](https://docs.fluentd.org/v0.12/articles/docker-logging-efk-compose) stack for collecting logs from all nodes
 * L7 loadbalancing using both HAProxy and Nginx
+* Prometheus and Grafana deployments based on helm charts
 * Grafana dashboards for guestbook application, HAProxy, Redis, Ngix
 * Scripts to move all monitoring to dedicated node
 * Hooks to interact with application/nodes that are not dedicated to monitoring
@@ -20,24 +21,43 @@ With this we implemented hooks to skip nodes with that label.
 
 ## Requirements:
 * GKE/GCP kubernetes cluster in version 1.8.x
-* [kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus) version 0.16.x
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [Helm](https://github.com/kubernetes/helm)
 * GNU Make
 * openssl
 * Bash
+* [jq](https://github.com/stedolan/jq)
 
 ## Deploy:
-```bash
-make
-```
+### From fresh cluster
+* Authorize account (GCP)
+  ```bash
+  kubectl create clusterrolebinding i-am-root --clusterrole=cluster-admin --user=<your email>
+  ```
+* Install Tiller with RBAC
+  ```bash
+  make tiller
+  ```
+* Deploy LogMon Demo components
+  ```bash
+  make
+  ```
 
-## Use dashboards in Grafana
-* Open [Grafana](http://localhost:8001/api/v1/proxy/namespaces/monitoring/services/grafana:3000)
-* Sign in using credentials (default admin:admin)
-* Import dashboards by providing files from grafana directory
-
+##### Use dashboards in Grafana
+* Get Grafana password
+  ```bash
+  make grafana-password
+  ```
+* Forward connection to grafana
+  ```bash
+  make grafana-forward
+  ```
+* Open [Grafana](http://localhost:3000)
+* Sign into admin account using aquired password
 
 ## Hooks
+Additional Requirements:
+* [gcloud](https://cloud.google.com/sdk/)
 ### Break connection from node to master
 Drops all packets on random node that are directed to master.
 Will result in node changing state to unready.

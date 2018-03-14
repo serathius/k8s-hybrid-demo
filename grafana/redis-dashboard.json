@@ -120,7 +120,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(redis_uptime_in_seconds{pod=\"$pod\"})",
+              "expr": "sum(redis_uptime_in_seconds{kubernetes_pod_name=\"$pod\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -202,7 +202,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(redis_connected_clients{pod=~\"$pod\"})",
+              "expr": "sum(redis_connected_clients{kubernetes_pod_name=~\"$pod\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -261,7 +261,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(redis_commands_processed_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(rate(redis_commands_processed_total{kubernetes_pod_name=~\"$pod\"}[5m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -345,7 +345,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(redis_keyspace_hits_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(irate(redis_keyspace_hits_total{kubernetes_pod_name=~\"$pod\"}[5m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -357,7 +357,7 @@
               "target": ""
             },
             {
-              "expr": "sum(irate(redis_keyspace_misses_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(irate(redis_keyspace_misses_total{kubernetes_pod_name=~\"$pod\"}[5m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -457,7 +457,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(redis_memory_used_bytes{pod=~\"$pod\"})",
+              "expr": "sum(redis_memory_used_bytes{kubernetes_pod_name=~\"$pod\"})",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "used",
@@ -467,7 +467,7 @@
               "target": ""
             },
             {
-              "expr": "sum(redis_config_maxmemory{pod=~\"$pod\"})",
+              "expr": "sum(redis_config_maxmemory{kubernetes_pod_name=~\"$pod\"})",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -548,7 +548,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(redis_net_input_bytes_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(rate(redis_net_input_bytes_total{kubernetes_pod_name=~\"$pod\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ input }}",
@@ -556,7 +556,7 @@
               "step": 2
             },
             {
-              "expr": "sum(rate(redis_net_output_bytes_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(rate(redis_net_output_bytes_total{kubernetes_pod_name=~\"$pod\"}[5m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -651,7 +651,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(redis_db_keys{pod=~\"$pod\"}) by (db)",
+              "expr": "sum(redis_db_keys{kubernetes_pod_name=~\"$pod\"}) by (db)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -733,7 +733,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum (redis_db_keys{pod=~\"$pod\"}) - sum (redis_db_keys_expiring{pod=~\"$pod\"}) ",
+              "expr": "sum (redis_db_keys{kubernetes_pod_name=~\"$pod\"}) - sum (redis_db_keys_expiring{kubernetes_pod_name=~\"$pod\"}) ",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -743,7 +743,7 @@
               "target": ""
             },
             {
-              "expr": "sum (redis_db_keys_expiring{pod=~\"$pod\"}) ",
+              "expr": "sum (redis_db_keys_expiring{kubernetes_pod_name=~\"$pod\"}) ",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -834,7 +834,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(redis_expired_keys_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(rate(redis_expired_keys_total{kubernetes_pod_name=~\"$pod\"}[2m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -845,7 +845,7 @@
               "target": ""
             },
             {
-              "expr": "sum(rate(redis_evicted_keys_total{pod=~\"$pod\"}[5m]))",
+              "expr": "sum(rate(redis_evicted_keys_total{kubernetes_pod_name=~\"$pod\"}[2m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -926,7 +926,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "topk(5, sum(irate(redis_command_call_duration_seconds_count{pod=~\"$pod\"} [1m])) by (cmd))",
+              "expr": "topk(5, sum(irate(redis_command_call_duration_seconds_count{kubernetes_pod_name=~\"$pod\"} [2m])) by (cmd))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -999,7 +999,7 @@
         "multi": true,
         "name": "pod",
         "options": [],
-        "query": "label_values(redis_commands_processed_total{service=~\"redis.*\"}, pod)",
+        "query": "label_values(redis_commands_processed_total{kubernetes_pod_name=~\"redis.*\"}, kubernetes_pod_name)",
         "refresh": 2,
         "regex": "",
         "sort": 0,
@@ -1042,5 +1042,5 @@
   },
   "timezone": "browser",
   "title": "Redis",
-  "version": 4
+  "version": 3
 }

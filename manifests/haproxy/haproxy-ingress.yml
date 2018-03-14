@@ -14,6 +14,9 @@ spec:
       labels:
         run: haproxy-ingress
         target: "true"
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9101'
     spec:
       serviceAccountName: ingress-controller
       containers:
@@ -75,24 +78,6 @@ spec:
     targetPort: 1936
   selector:
     run: haproxy-ingress
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: haproxy
-  labels:
-    k8s-app: haproxy
-  namespace: monitoring
-spec:
-  selector:
-    matchLabels:
-      app: haproxy-ingress
-  endpoints:
-  - port: metrics
-    interval: 10s
-  namespaceSelector:
-    matchNames:
-    - default
 ---
 apiVersion: v1
 kind: ConfigMap

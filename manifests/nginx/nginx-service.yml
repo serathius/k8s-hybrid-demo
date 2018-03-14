@@ -18,21 +18,3 @@ spec:
     targetPort: 10254
   selector:
     app: ingress-nginx
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: nginx
-  labels:
-    k8s-app: nginx
-  namespace: monitoring
-spec:
-  selector:
-    matchLabels:
-      app: ingress-nginx
-  endpoints:
-  - port: metrics
-    interval: 10s
-  namespaceSelector:
-    matchNames:
-    - default

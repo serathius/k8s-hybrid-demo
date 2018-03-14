@@ -1,14 +1,35 @@
 include defaults.env
 export $(shell sed 's/=.*//' defaults.env)
 
-all: move-monitoring-to-marked-node manifests dashboards
+helm_prometheus_name := logmon-prom
+helm_grafana_name := logmon-graf
+
+all: prometheus grafana manifests
+
+tiller:
+	helm init
+	kubectl create serviceaccount --namespace kube-system tiller
+	kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+	kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'ometheus:
+
+prometheus:
+	helm install stable/prometheus --name $(helm_prometheus_name) --version 5.4.2
+
+grafana: build/grafana.yml
+	helm install stable/grafana --name $(helm_grafana_name) --values build/grafana.yml --version 0.8.2
 
 manifests: tls-secret
 	kubectl apply -f manifests --recursive
 	envsubst < manifests/load/load-deployment.yml.tmpl | kubectl apply -f -
 
-move-monitoring-to-marked-node: mark-node
-	./scripts/move-monitoring-to-marked-node.sh
+grafana-password:
+	kubectl get secret --namespace default $(helm_grafana_name)-grafana -o jsonpath="{.data.grafana-admin-password}" | base64 --decode; echo
+
+grafana-forward:
+	kubectl --namespace default port-forward $$(kubectl get pods --namespace default -l "app=$(helm_grafana_name)-grafana,component=grafana" -o jsonpath="{.items[0].metadata.name}") 3000
+
+build/grafana.yml: build
+	GRAFANA_FILE=build/grafana.yml PROMETHEUS_URL=http://$(helm_prometheus_name)-prometheus-server ./scripts/template-helm.sh
 
 mark-node:
 	./scripts/mark-node.sh
@@ -45,8 +66,10 @@ hook-clear-redis-records:
 	kubectl exec -it $$(kubectl get pods | grep redis-master | cut -f1 -d' ') -c redis-master -- redis-cli FLUSHALL
 
 clean:
-	kubectl delete -f manifests --recursive
-	rm build
+	-kubectl delete -f manifests --recursive &> /dev/null
+	-helm del --purge $(helm_prometheus_name)
+	-helm del --purge $(helm_grafana_name)
+	-rm build -rf
 
 tls-secret: build/tls.crt build/tls.key
 	kubectl create secret tls tls-secret --cert=build/tls.crt --key=build/tls.key || true
@@ -57,24 +80,4 @@ build/tls.crt build/tls.key: build
 build:
 	mkdir -p build
 
-dashboards := $(wildcard grafana/*-dashboard.json)
-dashboard_targets := $(patsubst grafana/%,build/dashboards/%,$(dashboards))
-datasources := $(wildcard grafana/*-datasource.json)
-datasource_targets := $(patsubst grafana/%,build/dashboards/%,$(datasources))
-
-build/dashboards:
-	mkdir -p build/dashboards
-
-build/dashboards/%-dashboard.json: build/dashboards grafana/%-dashboard.json
-	cat grafana/$*-dashboard.json | jq -c '{dashboard:., overwrite: true, inputs: [.__inputs[] | {name:.name, type:.type, value: (if .value? then .value else .pluginId end), pluginId:.pluginId}| delpaths([path(.[]| select(.==null))])] }' > build/dashboards/$*-dashboard.json
-
-build/dashboards/%-datasource.json: build/dashboards grafana/%-datasource.json
-	cp grafana/$*-datasource.json build/dashboards
-
-build/grafana-configmap.yml: $(datasource_targets) $(dashboard_targets)
-	kubectl -n monitoring create configmap grafana-dashboards-0 --from-file=build/dashboards/ --dry-run -o yaml > build/grafana-configmap.yml
-
-dashboards: build/grafana-configmap.yml
-	kubectl apply -f build/grafana-configmap.yml
-
-.PHONY: deploy clean tls-secret dashboards
+.PHONY: deploy clean tls-secret prometheus grafana helm

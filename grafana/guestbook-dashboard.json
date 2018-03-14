@@ -175,7 +175,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{pod=~\"$Pod\"}",
+              "expr": "process_resident_memory_bytes{kubernetes_pod_name=~\"$Pod\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -252,7 +252,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"$Pod\"}[60s])) by (pod_name)",
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"$Pod\"}[2m])) by (pod_name)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ pod_name }}",
@@ -329,7 +329,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(go_gc_duration_seconds_sum{pod=~\"$Pod\"}[20s])",
+              "expr": "irate(go_gc_duration_seconds_sum{kubernetes_pod_name=~\"$Pod\"}[2m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{pod}}",
@@ -405,7 +405,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(guestbook_requests_total{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (code)",
+              "expr": "sum(irate(guestbook_requests_total{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (code)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{code}}",
@@ -481,7 +481,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(guestbook_request_duration_milliseconds_bucket{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99p",
@@ -489,7 +489,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.95, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.95, sum(rate(guestbook_request_duration_milliseconds_bucket{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "95p",
@@ -497,15 +497,16 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.90, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.90, sum(rate(guestbook_request_duration_milliseconds_bucket{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (le))",
               "format": "time_series",
+              "interval": "",
               "intervalFactor": 2,
               "legendFormat": "90p",
               "refId": "B",
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.75, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.75, sum(rate(guestbook_request_duration_milliseconds_bucket{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "75p",
@@ -513,7 +514,7 @@
               "step": 2
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(guestbook_request_duration_milliseconds_bucket{pod=~\"$Pod\", path!=\"/metrics\"}[30s])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(guestbook_request_duration_milliseconds_bucket{kubernetes_pod_name=~\"$Pod\", path!=\"/metrics\"}[2m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50p",
@@ -605,7 +606,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[2m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Utilization",
@@ -687,7 +688,7 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / avg(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) / $hpa_target",
+              "expr": "sum(irate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[2m])) / avg(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) / $hpa_target",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Pods required to target utilization",
@@ -798,7 +799,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(rate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[1m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{pod_name=~\"guestbook.*\"}[2m])) / sum(kube_pod_container_resource_requests_cpu_cores{pod=~\"guestbook.*\"}) ",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -929,7 +930,7 @@
         "multi": false,
         "name": "Pod",
         "options": [],
-        "query": "label_values(kube_pod_info{pod=~\"guestbook.*\"}, pod)",
+        "query": "label_values(kube_pod_info{kubernetes_pod_name=~\"guestbook.*\"}, pod)",
         "refresh": 2,
         "regex": "",
         "sort": 0,
@@ -989,5 +990,5 @@
   },
   "timezone": "",
   "title": "Guestbook",
-  "version": 18
+  "version": 1
 }

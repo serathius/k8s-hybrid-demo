@@ -13,6 +13,9 @@ spec:
     metadata:
       labels:
         app: guestbook
+      annotations:
+        prometheus.io/port: '3000'
+        prometheus.io/scrape: 'true'
     spec:
       containers:
       - name: guestbook
